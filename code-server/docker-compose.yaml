@@ -11,7 +11,7 @@ services:
       DOCKER_USER: ${USER:?}
     restart: always
     volumes:
-      - ${HOME}/.config/code-server:/home/coder/.config/code-server
-      - ${HOME}/.local/share/code-server:/home/coder/.local/share/code-server
+      - ${HOME}/vscode/config:/home/coder/.config
+      - ${HOME}/vscode/local:/home/coder/.local/share
       - ${HOME}/projects:/home/coder/projects
     user: ${UID:?}:${GID:?}
