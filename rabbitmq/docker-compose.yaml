@@ -1,0 +1,34 @@
+version: '3.7'
+
+volumes:
+  config:
+    name: rabbitmq_config
+  data:
+    name: rabbitmq_data
+  logs:
+    name: rabbitmq_logs
+
+networks:
+  rabbitmq:
+    name: rabbitmq
+
+services:
+  rabbitmq:
+    image: rabbitmq:3.8-management
+    container_name: rabbitmq
+    hostname: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      RABBITMQ_DEFAULT_USER: '${RABBITMQ_USER:?}'
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:?}
+      RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_VHOST:?}
+      RABBITMQ_NODENAME: rabbit@rabbitmq
+    restart: always
+    volumes:
+      - config:/etc/rabbitmq
+      - data:/var/lib/rabbitmq
+      - logs:/var/log/rabbitmq
+    networks:
+      - rabbitmq
