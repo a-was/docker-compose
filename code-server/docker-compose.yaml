@@ -1,0 +1,16 @@
+version: '3.7'
+
+services:
+  coder:
+    image: codercom/code-server:3.10.2
+    container_name: code-server
+    hostname: code
+    # ports:
+    #   - 50100:8080
+    environment:
+      DOCKER_USER: ${USER:?}
+    restart: always
+    volumes:
+      - ${HOME}/.config:/home/coder/.config
+      - ${HOME}/projects:/home/coder/projects
+    user: ${UID:?}:${GID:?}
