@@ -31,7 +31,7 @@ services:
     depends_on:
       - mongo
     ports:
-      - 10001:8081
+      - 27018:8081
     environment:
       ME_CONFIG_BASICAUTH_USERNAME: '${MONGODB_GUI_LOGIN:?}'
       ME_CONFIG_BASICAUTH_PASSWORD: '${MONGODB_GUI_PASSWORD:?}'
