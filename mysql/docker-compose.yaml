@@ -1,0 +1,43 @@
+version: '3.7'
+
+volumes:
+  mysql:
+    name: mysql_data
+
+networks:
+  mysql:
+    name: mysql
+
+services:
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    hostname: mysql
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: '${MYSQL_ROOT_PASSWORD:?}'
+      MYSQL_DATABASE: '${MYSQL_DATABASE:-db}'
+    restart: always
+    volumes:
+      - mysql:/var/lib/mysql
+    networks:
+      - mysql
+
+  phpmyadmin:
+    image: phpmyadmin:5.1
+    container_name: phpmyadmin
+    hostname: myadmin
+    depends_on:
+      - mysql
+    links:
+      - mysql
+    ports:
+      - 8080:80
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    restart: always
+    networks:
+      - mysql
