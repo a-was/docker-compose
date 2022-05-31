@@ -12,7 +12,7 @@ networks:
 
 services:
   db:
-    image: mariadb:10.6
+    image: mariadb:10.8
     command: --max-allowed-packet=64MB
     container_name: matomo_mariadb
     hostname: matomo_mariadb
@@ -28,7 +28,7 @@ services:
       - matomo
 
   matomo:
-    image: matomo:4.4
+    image: matomo:4.10
     container_name: matomo
     hostname: matomo
     depends_on:

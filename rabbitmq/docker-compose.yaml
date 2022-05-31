@@ -14,7 +14,7 @@ networks:
 
 services:
   rabbitmq:
-    image: rabbitmq:3.8-management
+    image: rabbitmq:3.10-management
     container_name: rabbitmq
     hostname: rabbitmq
     ports:
