@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.7"
 
 volumes:
   mysql:
@@ -10,14 +10,14 @@ networks:
 
 services:
   mysql:
-    image: mysql:5.7
+    image: mysql:${MYSQL_VERSION:-5.7}
     container_name: mysql
     hostname: mysql
     ports:
-      - 3306:3306
+      - ${MYSQL_PORT:-3306}:3306
     environment:
-      MYSQL_ROOT_PASSWORD: '${MYSQL_ROOT_PASSWORD:?}'
-      MYSQL_DATABASE: '${MYSQL_DATABASE:-db}'
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-db}
     restart: always
     volumes:
       - mysql:/var/lib/mysql
@@ -30,14 +30,14 @@ services:
     hostname: myadmin
     depends_on:
       - mysql
-    links:
-      - mysql
     ports:
-      - 8080:80
+      - ${PHPMYADMIN_PORT:-8080}:80
     environment:
       PMA_HOST: mysql
       PMA_PORT: 3306
-      PMA_ARBITRARY: 1
+      PMA_USER: root
+      PMA_PASSWORD: ${MYSQL_ROOT_PASSWORD:?}
+      UPLOAD_LIMIT: 100mb
     restart: always
     networks:
       - mysql

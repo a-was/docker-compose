@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.7"
 
 volumes:
   db:
@@ -27,22 +27,24 @@ services:
     networks:
       - matomo
 
-  app:
+  matomo:
     image: matomo:4.4
     container_name: matomo
     hostname: matomo
+    depends_on:
+      - db
     restart: always
     ports:
-      - ${MATOMO_PORT:?}:80
+      - ${MATOMO_PORT:-8080}:80
     volumes:
       - matomo:/var/www/html
       # - ./config:/var/www/html/config
     environment:
       MATOMO_DATABASE_HOST: db
       MATOMO_DATABASE_ADAPTER: mysql
-      # MATOMO_DATABASE_TABLES_PREFIX: matomo_
-      MATOMO_DATABASE_DBNAME: matomo
-      MATOMO_DATABASE_USERNAME: matomo
-      MATOMO_DATABASE_PASSWORD: ${MATOMO_DATABASE_PASSWORD:?}
+      MATOMO_DATABASE_TABLES_PREFIX: ${MATOMO_DATABASE_TABLES_PREFIX:-matomo_}
+      MATOMO_DATABASE_DBNAME: ${MYSQL_DATABASE:?}
+      MATOMO_DATABASE_USERNAME: ${MYSQL_USER:?}
+      MATOMO_DATABASE_PASSWORD: ${MYSQL_PASSWORD:?}
     networks:
       - matomo
