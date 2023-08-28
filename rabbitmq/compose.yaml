@@ -1,5 +1,3 @@
-version: "3.7"
-
 volumes:
   config:
     name: rabbitmq_config
@@ -14,18 +12,18 @@ networks:
 
 services:
   rabbitmq:
-    image: rabbitmq:3.10-management
+    image: rabbitmq:${RABBITMQ_VERSION:?}
     container_name: rabbitmq
     hostname: rabbitmq
     ports:
-      - 5672:5672
-      - 15672:15672
+      - ${RABBITMQ_PORT:-5672}:5672
+      - ${RABBITMQ_MANAGEMENT_PORT:-15672}:15672
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:?}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:?}
       RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_VHOST:-default}
       RABBITMQ_NODENAME: rabbit@rabbitmq
-    restart: always
+    restart: unless-stopped
     volumes:
       - config:/etc/rabbitmq
       - data:/var/lib/rabbitmq
