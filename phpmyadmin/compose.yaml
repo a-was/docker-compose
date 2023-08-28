@@ -1,0 +1,14 @@
+services:
+  phpmyadmin:
+    image: phpmyadmin:${PHPMYADMIN_VERSION:?}
+    container_name: phpmyadmin
+    hostname: phpmyadmin
+    environment:
+      APACHE_PORT: ${PHPMYADMIN_PORT:?}
+      PMA_ARBITRARY: $PMA_ARBITRARY
+      PMA_HOST: ${PMA_HOST:-127.0.0.1}
+      PMA_PORT: ${PMA_PORT:-3306}
+      UPLOAD_LIMIT: ${UPLOAD_LIMIT:-100M}
+      PMA_ABSOLUTE_URI: $PMA_ABSOLUTE_URI # https://host/path
+    restart: unless-stopped
+    network_mode: host

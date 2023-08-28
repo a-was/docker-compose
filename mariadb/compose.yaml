@@ -1,0 +1,49 @@
+volumes:
+  mariadb:
+    name: mariadb_data
+
+networks:
+  mariadb:
+    name: mariadb
+
+services:
+  mariadb:
+    image: mariadb:${MARIADB_VERSION:?}
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    container_name: mariadb
+    hostname: mariadb
+    ports:
+      - ${MARIADB_PORT:-3306}:3306
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD:?}
+      MARIADB_USER: $MARIADB_USER
+      MARIADB_PASSWORD: $MARIADB_PASSWORD
+      MARIADB_DATABASE: ${MARIADB_DATABASE:-db}
+    restart: unless-stopped
+    volumes:
+      - mariadb:/var/lib/mysql
+      - ./init:/docker-entrypoint-initdb.d
+    networks:
+      - mariadb
+
+  phpmyadmin:
+    image: phpmyadmin:${PHPMYADMIN_VERSION:?}
+    container_name: phpmyadmin
+    hostname: phpmyadmin
+    depends_on:
+      - mariadb
+    ports:
+      - ${PHPMYADMIN_PORT:3307}:80
+    environment:
+      # PMA_ARBITRARY: $PMA_ARBITRARY
+      PMA_HOST: mariadb
+      PMA_PORT: 3306
+      # PMA_USER: root
+      # PMA_PASSWORD: ${MARIADB_ROOT_PASSWORD:?}
+      # PMA_USER: $MARIADB_USER
+      # PMA_PASSWORD: $MARIADB_PASSWORD
+      UPLOAD_LIMIT: ${UPLOAD_LIMIT:-100M}
+      PMA_ABSOLUTE_URI: $PMA_ABSOLUTE_URI # https://host/path
+    restart: unless-stopped
+    networks:
+      - mariadb
